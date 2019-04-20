@@ -3,7 +3,9 @@ package com.example.samplecompasstracker;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,24 +14,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.samplecompasstracker.listener.CompassListener;
-import com.example.samplecompasstracker.listener.FusedLocationListener;
-import com.example.samplecompasstracker.model.Coordinates;
-import com.example.samplecompasstracker.permission.LocationPermissionManager;
-import com.example.samplecompasstracker.util.DestinationPoint;
-import com.example.samplecompasstracker.util.Utils;
-import com.example.samplecompasstracker.util.ValidUtils;
-import com.example.samplecompasstracker.view.CompassView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
-import static com.example.samplecompasstracker.permission.LocationPermissionManager.PERMISSIONS_REQUEST;
+import static com.example.samplecompasstracker.LocationPermissionManager.PERMISSIONS_REQUEST;
 
 public class MainActivity extends AppCompatActivity implements CompassListener, FusedLocationListener {
-    public static final String TAG = MainActivity.class.getSimpleName();
 
+    public static final String TAG = MainActivity.class.getSimpleName();
+//    private static final long UPDATE_INTERVAL = 5000;
+//    private static final long FASTEST_UPDATE_INTERVAL = UPDATE_INTERVAL/2;
+
+//    private FusedLocationProviderClient fusedLocationProviderClient;
+//    private LocationRequest locationRequest;
+//    private LocationCallback locationCallback;
     private CompassSensor compassSensor;
     private FusedLocationClient fusedLocationClient;
-    private Coordinates userLocation = null;
-    private Coordinates destinationLocation = null;
 
     private TextInputLayout longitudeTextLayout, latitudeTextLayout;
     private EditText longitudeEditText, latitudeEditText;
@@ -47,23 +50,32 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
         init();
 
         fusedLocationClient = FusedLocationClient.getInstance(this);
-        fusedLocationClient.addFusedListener(this);
+        fusedLocationClient.setFusedListener(this);
+
         getFusedLocation();
+//
+//        createLocationRequest();
+//        getFusedLocation();
     }
 
     private void init() {
         compassSensor = new CompassSensor(this);
         compassSensor.setCompassListener(this);
+
+//        locationCallback = new LocationCallback() {
+//            @Override
+//            public void onLocationResult(LocationResult locationResult) {
+//                super.onLocationResult(locationResult);
+//                onNewLocation(locationResult.getLastLocation());
+//            }
+//        };
+
         destinationButton.setOnClickListener(v -> {
-            removeFocus();
             if (!LocationPermissionManager.checkLocationPermissions(this)) {
                 LocationPermissionManager.checkRequestLocationPermissions(this);
             } else {
                 setDestinationLocation(latitudeEditText.getText().toString(),
                         longitudeEditText.getText().toString());
-                if (ValidUtils.startValid(this, latitudeTextLayout, longitudeTextLayout, userLocation, destinationLocation)) {
-                    compassView.setDestinationLoaction(DestinationPoint.getBearing(userLocation, destinationLocation));
-                }
             }
         });
     }
@@ -86,18 +98,56 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
         compassView = findViewById(R.id.compass_view);
     }
 
+    /**
+     * Priority can be set on PRIORITY_BALANCED_POWER_ACCURACY for better battery optimization
+     */
+//    private void createLocationRequest() {
+//        locationRequest = new LocationRequest();
+//        locationRequest.setInterval(UPDATE_INTERVAL);
+//        locationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL);
+//        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//    }
+
+    /**
+     * Permission will be check, so we don't have to do it here again (checkLocationPermissions)
+     */
     private void getFusedLocation() {
+//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         if (LocationPermissionManager.checkLocationPermissions(this)) {
             fusedLocationClient.getFusedLocation();
+//            fusedLocationProviderClient.getLastLocation()
+//                    .addOnSuccessListener(this, location -> {
+//                        Log.i(TAG, "OnSuccessListener - get location");
+//                        if (location != null) {
+//                            setUserLocation(location);
+//                        } else {
+//                            Log.w(TAG, "Failed to get location");
+//                            setUserLocation(location);
+//                        }
+//                    });
+//            requestLocationUpdate();
         } else {
             Log.i(TAG, "Permissions not granted");
             LocationPermissionManager.checkRequestLocationPermissions(this);
         }
     }
 
+//    private void requestLocationUpdate() {
+//        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+//    }
+
+//    private void setUserLocation(Location location) {
+//        if (location != null) {
+//
+//        } else {
+//            userLatitude.setText(getString(R.string.location_unknow));
+//            userLongitude.setText(getString(R.string.location_unknow));
+//        }
+//    }
+
     private void setDestinationLocation(String lat, String lng) {
-        if (!lat.isEmpty() && !lng.isEmpty()) {
-            destinationLocation = Utils.getCoordinatesFromPoints(lat, lng);
+        if (lat != null && lng != null) {
+            Coordinates destinationCoordinates = Utils.getCoordinatesFromPoints(lat, lng);
             destinationLatitude.setText("Lat: " + lat);
             destinationLongitude.setText("Lng: " + lng);
         }
@@ -132,27 +182,11 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
 
     }
 
-    private void removeFocus() {
-        latitudeTextLayout.clearFocus();
-        longitudeTextLayout.clearFocus();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        fusedLocationClient.removeFusedListener(this);
         if (fusedLocationClient != null)
             fusedLocationClient.removeLocationUpdate();
-    }
-
-    private void updateUserLocationOnUI(Coordinates userLocation) {
-        if (userLocation != null) {
-            userLatitude.setText("Lat: " + Utils.FormatCoordinateText(userLocation.getLatitude()));
-            userLongitude.setText("Lng: " + Utils.FormatCoordinateText(userLocation.getLongitude()));
-        } else {
-            userLatitude.setText("Lat: " + getString(R.string.unknown_location));
-            userLongitude.setText("Lng: " + getString(R.string.unknown_location));
-        }
     }
 
     @Override
@@ -162,18 +196,19 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
 
     @Override
     public void setFusedLocation(Location location) {
-        userLocation = new Coordinates(location.getLatitude(), location.getLongitude());
-        updateUserLocationOnUI(userLocation);
+        userLatitude.setText("Lat: " + Utils.FormatCoordinateText(location.getLatitude()));
+        userLongitude.setText("Lng: " + Utils.FormatCoordinateText(location.getLongitude()));
     }
 
     @Override
-    public void setUnknownLocation() {
-        updateUserLocationOnUI(null);
+    public void setUnknowLocation() {
+        userLatitude.setText("Lat: ?????");
+        userLongitude.setText("Lng: ?????");
     }
 
     @Override
     public void onNewLocation(Location lastLocation) {
-        userLocation.setCoordinates(lastLocation.getLatitude(), lastLocation.getLongitude());
-        updateUserLocationOnUI(userLocation);
+        userLatitude.setText("Lat: " + Utils.FormatCoordinateText(lastLocation.getLatitude()));
+        userLongitude.setText("Lng: " + Utils.FormatCoordinateText(lastLocation.getLongitude()));
     }
 }

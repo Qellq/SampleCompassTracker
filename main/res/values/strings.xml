@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SampleCompassTracker</string>
+    <string name="latitude_hint_text">Latitude</string>
+    <string name="longitude_hint_text">Longitude</string>
+    <string name="location_unknow">\???</string>
+    <string name="destination_location_text">Destination Location</string>
+    <string name="lat_text">Lat:</string>
+    <string name="lng_text">Lat:</string>
+</resources>

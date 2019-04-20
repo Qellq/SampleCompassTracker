@@ -8,8 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="error_appearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/compass_north_color</item>
-    </style>
-
 </resources>
