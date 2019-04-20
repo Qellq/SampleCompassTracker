@@ -2,5 +2,13 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#008577</color>
+
+    <color name="compass_foreground_color">#2f2f37</color>
+    <color name="compass_background_color">#1e1d23</color>
+    <color name="compass_text_secondary_color">#BBBAC0</color>
+    <color name="compass_text_primary_color">#ffffff</color>
+    <color name="compass_small_degree_color">#999999</color>
+    <color name="compass_north_color">#BD0101</color>
+    <color name="compass_destination_color">#06A00D</color>
 </resources>
