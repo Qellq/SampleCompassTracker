@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="window_background_color">#2f2f37</color>
+    <color name="compass_foreground_color">#2f2f37</color>
+    <color name="compass_background_color">#1e1d23</color>
+    <color name="compass_text_secondary_color">#BBBAC0</color>
+    <color name="compass_text_primary_color">#ffffff</color>
+    <color name="compass_small_degree_color">#999999</color>
+    <color name="compass_accent_color">#03a9f4</color>
+    <color name="compass_north_color">#BD0101</color>
+</resources>
