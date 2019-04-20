@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">SampleCompassTracker</string>
+    <string name="latitude_hint_text">Latitude</string>
+    <string name="longitude_hint_text">Longitude</string>
+    <string name="destination_location_text">Destination Location</string>
+    <string name="lat_text">Lat:</string>
+    <string name="lng_text">Lat:</string>
+    <string name="permission_dialog_title">Required Location Permission</string>
+    <string name="permission_dialog_message">You have to grant location permission to set your target</string>
+    <string name="permission_dialog_positive_bt">Allow</string>
+    <string name="permission_dialog_negative_bt">No, Thanks</string>
+    <string name="coordinates_dialog_title">Duplicate Coordinates</string>
+    <string name="coordinates_dialog_message">Your location is the same like destination location</string>
+    <string name="coordinates_dialog_ok_bt">Ok</string>
+    <string name="button_destination_text">Set Destination</string>
+    <string name="unknown_location">\????</string>
 </resources>
