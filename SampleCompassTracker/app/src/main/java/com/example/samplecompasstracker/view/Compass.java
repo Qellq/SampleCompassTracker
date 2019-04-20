@@ -33,7 +33,6 @@ public class Compass {
     private int textMainColor;
     private int textSecondaryColor;
     private int backgroundColor;
-    private int foregroundColor;
     private int smallDegreesColor;
     private int circleColor;
     private int northColor;
@@ -68,8 +67,6 @@ public class Compass {
     private void drawDestinationPoint(Canvas canvas, float destinationBearing) {
         float point = realPx(40);
         float radius = realPx(maxCompassRadius);
-//        float newX = centerPoint.x;
-//        float newY = centerPoint.y - realPx(maxCompassRadius);
         destinationPaint.setColor(destinationColor);
         destinationPaint.setStyle(Paint.Style.FILL);
 
@@ -109,7 +106,7 @@ public class Compass {
         canvas.drawPath(userDirectionPath, mainPaint);
 
         directionsTextPaint.setTextSize(realPx(80));
-        String str = ((int) azimuth + "° ");
+        String str = ((int) azimuth + "°");
         Rect rect = new Rect();
         directionsTextPaint.getTextBounds(str, 0, str.length(), rect);
         newX = centerPoint.x - directionsTextPaint.measureText(str) / 2.0f;
@@ -322,7 +319,6 @@ public class Compass {
         textMainColor = ContextCompat.getColor(context, R.color.compass_text_primary_color);
         textSecondaryColor = ContextCompat.getColor(context, R.color.compass_text_secondary_color);
         backgroundColor = ContextCompat.getColor(context, R.color.compass_background_color);
-        foregroundColor = ContextCompat.getColor(context, R.color.compass_foreground_color);
         smallDegreesColor = ContextCompat.getColor(context, R.color.compass_small_degree_color);
         circleColor = ContextCompat.getColor(context, R.color.compass_text_secondary_color);
         northColor = ContextCompat.getColor(context, R.color.compass_north_color);

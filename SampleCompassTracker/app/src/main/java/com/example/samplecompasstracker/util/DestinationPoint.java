@@ -2,8 +2,6 @@ package com.example.samplecompasstracker.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 
 import com.example.samplecompasstracker.R;
 import com.example.samplecompasstracker.model.Coordinates;

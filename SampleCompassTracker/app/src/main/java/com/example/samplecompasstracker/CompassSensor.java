@@ -11,9 +11,8 @@ import com.example.samplecompasstracker.listener.CompassListener;
 public class CompassSensor implements SensorEventListener {
 
     private boolean hasVector = true;
-//    private boolean hasMagnetic =  true;
     private SensorManager sensorManager;
-    private Sensor rotationVectorSensor, magneticSensor, accelerometerSensor;
+    private Sensor rotationVectorSensor;
     private float[] rotationMatrix = new float[9];
     private float[] orientation = new float[3];
     private float azimuth = 0.0f;
@@ -25,8 +24,6 @@ public class CompassSensor implements SensorEventListener {
     public CompassSensor(Context context) {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        magneticSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
     public void setCompassListener(CompassListener compassListener) {
@@ -39,11 +36,6 @@ public class CompassSensor implements SensorEventListener {
         } else {
             sensorManager.registerListener(this, rotationVectorSensor, SensorManager.SENSOR_DELAY_FASTEST);
         }
-//        if (magneticSensor == null) {
-//            hasMagnetic = false;
-//        } else {
-//            sensorManager.registerListener(this, magneticSensor, SensorManager.SENSOR_DELAY_FASTEST);
-//        }
     }
 
     public void uninitSensor() {
