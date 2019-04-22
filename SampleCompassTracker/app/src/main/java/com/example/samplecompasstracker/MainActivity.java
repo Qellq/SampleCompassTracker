@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
                 setDestinationLocation(latitudeEditText.getText().toString(),
                         longitudeEditText.getText().toString());
                 if (ValidUtils.startValid(this, latitudeTextLayout, longitudeTextLayout, userLocation, destinationLocation)) {
+                    compassView.setTrackingMode(true);
                     compassView.setDestinationLoaction(DestinationPoint.getBearing(userLocation, destinationLocation));
                 }
             }
@@ -175,5 +176,7 @@ public class MainActivity extends AppCompatActivity implements CompassListener, 
     public void onNewLocation(Location lastLocation) {
         userLocation.setCoordinates(lastLocation.getLatitude(), lastLocation.getLongitude());
         updateUserLocationOnUI(userLocation);
+        if (compassView.isTracking())
+            compassView.setDestinationLoaction(DestinationPoint.getBearing(userLocation, destinationLocation));
     }
 }

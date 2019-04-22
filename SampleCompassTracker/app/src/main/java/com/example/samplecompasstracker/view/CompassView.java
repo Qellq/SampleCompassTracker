@@ -102,4 +102,12 @@ public class CompassView extends View {
     public void setDestinationLoaction(float destinationBearing) {
         compass.setDestinationLocation(destinationBearing);
     }
+
+    public void setTrackingMode(boolean isTracking) {
+        compass.setTracking(isTracking);
+    }
+
+    public boolean isTracking() {
+        return compass.isTracking();
+    }
 }

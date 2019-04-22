@@ -355,11 +355,14 @@ public class Compass {
     }
 
     public void setDestinationLocation(float bearing) {
-        isTracking = true;
         destinationBearing = bearing;
     }
 
     public void setTracking(boolean isTracking) {
         this.isTracking = isTracking;
+    }
+
+    public boolean isTracking() {
+        return isTracking;
     }
 }
